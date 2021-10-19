@@ -1,0 +1,36 @@
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 28px;
+  }
+  
+  
+  .pagination__link {
+    line-height: 40px;
+    font-size: 18px;
+    font-weight: 400;
+    text-decoration: none;
+  }
+  
+  .pagination__group {
+    background-color: #EDEDED;
+    display: flex;
+    gap: 30px;
+    padding: 0 30px;
+    border-radius: 40px;
+  }
+  
+  .pagination__link_active {
+    background-color: #6F64F8;
+    padding: 0 15px;
+    border-radius: 40px;
+    color: white;
+  }
+  
+  .pagination__prev, .pagination__next {
+    background-color: #EDEDED;
+    padding: 0 15px;
+    border-radius: 40px;
+  } 
+
+  

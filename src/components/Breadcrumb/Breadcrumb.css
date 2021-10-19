@@ -1,0 +1,32 @@
+.breadcrumb .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .breadcrumb__item {
+    display: flex;
+    align-items: center;
+    padding-right: 12px;
+  }
+  
+  .breadcrumb__item:last-child {
+    padding-right: 0;
+    font-size: 0.875rem;
+    color: typography-700;
+  }
+  
+  .breadcrumb__link {
+    cursor: default;
+    text-decoration: none;
+    color: #6f64f8;
+  }
+  
+  .breadcrumb .link-icon {
+    display: none;
+    padding-left: 12px;
+    font-size: 0.75rem;
+    color: typography-900;
+  }
