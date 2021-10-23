@@ -7,28 +7,32 @@ import Bag from './shopping-bag.svg';
 
 
 
-function ProductCard() {
+function ProductCard(props) {
+
+    const {title, price, rating, brand, images} = props.item;
+    console.log(props);
     return (
         <div className="product-card">
         <div className="product-card__inner">
             <div className="product-card__image" >
+            <img src={images[0]} alt="" />
             </div>
             <div className="product-card__wrapper">
                 <div className="product-card__rating rating">
-                    <span className="rating__count">3.4
+                    <span className="rating__count">{rating}
                         <img className="rating__image" src={Star} />
                     </span>
                     
                 </div>  
                 <div className="rating__price">
-                    $199
+                    {price}
                 </div>
             </div>
             <h3 className="product-card__name">
-                JBL Speaker
+                {title}
             </h3>
             <div className="product-card__description">
-                Redesigned from scratch and completely revised.
+                {brand}
             </div>
         </div>
             <div className="product-card__buttons">

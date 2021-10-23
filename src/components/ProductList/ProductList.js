@@ -2,16 +2,21 @@ import './ProductList.css';
 import ProductCard from "./../ProductCard";
 
 
-function ProductList () {
+function ProductList (props) {
+    const {prodlist} = props;
+
     return (
         <>
         <h1>Product</h1>
         <div className="product-list">
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
-            <ProductCard />
+            {
+                prodlist.map(productitem => {
+                    return (
+                    <ProductCard item={productitem} />
+                    )
+                })
+            }
+            
         </div>
         </>
     )
