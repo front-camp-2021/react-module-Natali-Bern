@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
 import Pagination from '../Pagination/Pagination';
 import ProductList from '../ProductList';
 import Search from '../Search/Search';
@@ -45,7 +46,11 @@ const initProducts = [{
 function MainPage() {
     const [products, setProducts] = useState(initProducts);
 
- 
+    useEffect(() => {
+        axios.get('http://localhost:3001/products')
+            .then(res => setProducts(res.data))
+    }, [])
+
     return (
         <div className="container page-wrapper">
             <Sidebar />
