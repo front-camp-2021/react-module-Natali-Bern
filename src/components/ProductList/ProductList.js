@@ -1,9 +1,20 @@
 import './ProductList.css';
 import ProductCard from "./../ProductCard";
-
+import { getProducts } from '../../actions/actions';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
 
 function ProductList (props) {
-    const {prodlist} = props;
+    //  const {prodlist} = props;
+    const dispatch = useDispatch();
+    const prodlist = useSelector((state) => state.prodlist.productitem);
+    
+
+    useEffect(() => {
+        dispatch(getProducts());
+        
+    }, [])
 
     return (
         <>

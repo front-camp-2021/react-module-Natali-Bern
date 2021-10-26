@@ -8,6 +8,7 @@ import { applyMiddleware, createStore } from 'redux';
 import { rootReducer } from './reducers/reducer';
 
 
+
 const middleware = applyMiddleware(thunk);
 const store = createStore(rootReducer, undefined, middleware);
 

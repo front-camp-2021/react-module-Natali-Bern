@@ -1,19 +1,19 @@
-import axios from "axios";
+import axios from 'axios';
 
 export const GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS';
 
-export const getProductsSuccess = (products) => {
+export const getProductsSuccess = (prodlist) => {
     return {
         type: GET_PRODUCTS_SUCCESS,
-        payload: products
+        payload: prodlist
     }
 }
 
 export const getProducts = () => {
     return (dispatch) => {
-        axios.get('http://localhost:3001/products')
-            .then(res => {
-                dispatch(getProductsSuccess(res.data));
+        axios.get(`http://localhost:3001/products`)
+            .then(response => {
+                dispatch(getProductsSuccess(response.data));
             })
     }
 }
