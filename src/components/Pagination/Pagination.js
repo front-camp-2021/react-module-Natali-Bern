@@ -1,64 +1,95 @@
-import './Pagination.css';
-// import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Pages from '../Pages';
-import { TO_NEXT, TO_PREV } from '../../actions/paginationActions';
+import { useDispatch, useSelector } from "react-redux";
+import { setElements, setPageBack, setPageForward,} from "../../redux/paginationSlice";
 
-function Pagination() {
+function Pagination(props) {
+  const dispatch = useDispatch();
+  const elementsIndexes = useSelector((state) => state.paginationElements)[
+    useSelector((state) => state.paginationElements).length - 1
+  ];
+  const pagesTotal = [...Array(Math.ceil(props.cardsData.length / 9)).keys()];
 
-    const pages = useSelector(state => state.pagination);
-    const dispatch = useDispatch();
-
-    const pagesArray = [];
-
-//   for (let i = 0; i < pages.totalPage; i++) {
-//     pagesArray.push(i + 1);
-//   }
-
-  function toNextHandler() {
-    dispatch({
-      type: TO_NEXT
-    })
-  }
-
-  function toPrevHandler() {
-    dispatch({
-      type: TO_PREV
-    })
-  }
-
-
-
-
-
-
-
-
-    return (
-        
-        <div className="pagination">
-                <a className="pagination__link pagination__prev" href="#" onClick={toPrevHandler}>&laquo;</a>
-
-                <div className="pagination__group">
-                {pagesArray.map((item, index) =>
-
-                    <Pages
-                        page={item}
-                        key={index}
-                        active={pages.currentPage == item ? 'active' : ""}
-                    />
-                )}
-                    <a className="pagination__link" href="#">1</a>
-                    <a className="pagination__link pagination__link_active" href="#">2</a>
-                    <a className="pagination__link" href="#">3</a>
-                    <a className="pagination__link" href="#">4</a>
-                    <a className="pagination__link" href="#">5</a>
-                    <a className="pagination__link" href="#">6</a> 
-                </div>
-                <a className="pagination__link pagination__next" href="#" onClick={toNextHandler}>&raquo;</a>
-            </div> 
-        
+  function changePage(event) {
+    dispatch(
+      setElements({
+        indexesAndActivePage: [
+          (event.target.textContent - 1) * 9,
+          event.target.textContent * 9,
+          Number(event.target.textContent),
+        ],
+      })
     );
+  }
+
+  function pageBack() {
+    dispatch(
+      setPageBack({
+        pageBackIndexes: [
+          elementsIndexes[0] - 9,
+          elementsIndexes[1] - 9,
+          elementsIndexes[2] - 1,
+        ],
+      })
+    );
+  }
+
+  function pageForward() {
+    dispatch(
+      setPageForward({
+        pageForwardIndexes: [
+          elementsIndexes[0] + 9,
+          elementsIndexes[1] + 9,
+          elementsIndexes[2] + 1,
+        ],
+      })
+    );
+  }
+
+  return (
+    <div className="pagination">
+      {elementsIndexes[2] === 1 ? (
+        ""
+      ) : (
+        <button
+          className="pagination__button-page-back"
+          onPointerDown={pageBack}
+        ></button>
+      )}
+      <div className="pagination__main">
+        {pagesTotal.map((page) => {
+          if (page + 1 === elementsIndexes[2]) {
+            return (
+              <button
+                key={page}
+                onPointerDown={changePage}
+                className="pagination__page active"
+              >
+                {page + 1}
+              </button>
+            );
+          } else {
+            return (
+              <button
+                key={page}
+                onPointerDown={changePage}
+                className="pagination__page"
+              >
+                {page + 1}
+              </button>
+            );
+          }
+        })}
+      </div>
+      {elementsIndexes[2] === pagesTotal.length ? (
+        ""
+      ) : (
+        <button
+          className="pagination__button-page-forward"
+          onPointerDown={pageForward}
+        ></button>
+      )}
+    </div>
+  );
 }
+
 
 export default Pagination;

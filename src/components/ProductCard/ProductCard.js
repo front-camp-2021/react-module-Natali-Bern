@@ -1,57 +1,90 @@
-import React from "react";
-import './ProductCard.css';
-import  Star from './star.svg';
-import Heart from './heart.svg';
-import Bag from './shopping-bag.svg';
+  import WishlistButton from "./WishlistButton/WishlistButton";
+ import { useDispatch, useSelector } from "react-redux";
+ import { addToWishlist, removeFromWishlist } from "../../redux/wishlistSlice";
+ import { Link } from "react-router-dom";
+ import { addDisplayedCard } from "../../redux/itemPageSlice";
 
+ function ProductCard({ img, id, rating, title, price, displayed }) {
+   const dispatch = useDispatch();
+   const wishlistCards = useSelector((state) => state.wishlist);
+   const isInWishlist = wishlistCards.includes(id);
 
+   function setWishlistItems(event) {
+     let isInWishlist = false;
 
+     wishlistCards.filter((item) => {
+       if (item === event.target.id) {
+         isInWishlist = true;
+       }
+       return null;
+     });
 
-function ProductCard(props) {
+     if (isInWishlist) {
+       dispatch(
+         removeFromWishlist({
+           item: event.target.id,
+         })
+       );
+     } else {
+       dispatch(
+         addToWishlist({
+           item: event.target.id,
+         })
+       );
+     }
+   }
 
-    const {title, price, rating, brand, images} = props.item;
-    console.log(props);
-    return (
-        <div className="product-card">
-        <div className="product-card__inner">
-            <div className="product-card__image" >
-            <img src={images[0]} alt="" />
-            </div>
-            <div className="product-card__wrapper">
-                <div className="product-card__rating rating">
-                    <span className="rating__count">{rating}
-                        <img className="rating__image" src={Star} />
-                    </span>
-                    
-                </div>  
-                <div className="rating__price">
-                    {price}
-                </div>
-            </div>
-            <h3 className="product-card__name">
-                {title}
-            </h3>
-            <div className="product-card__description">
-                {brand}
-            </div>
-        </div>
-            <div className="product-card__buttons">
-                <button className="button-wishlist">
-                    <img className="button-wishlist__image" src={Heart} />
-                    <span className="button-wishlist__text">Wishlist</span>
-                </button>
-                <button className="button-addtocart">
-                    <img className="button-addtocart__image" src={Bag} />
-                    <span className="button-addtocart__text">Add to Cart</span>
-                </button>
-            </div>
-    </div> 
+   function setActiveItem() {
+     dispatch(
+       addDisplayedCard({
+         card: {
+           id: id,
+           img: img,
+           rating: rating,
+           price: price,
+           title: title,
+         },
+       })
+     );
+   }
 
-    );
-}
-
-
-        
+   return (
+     <div className="products__card">
+       <img src={img} className="products__image" alt={title}></img>
+       <div className="products__rating-and-price">
+         <div className="products__rating">{rating}</div>
+         <div className="products__price">₴{price}</div>
+       </div>
+       <ul className="products__item-descriptions">
+         <Link to={`/id:${id}`} className="products__item-page-link">
+           <li
+             className="products__item-name"
+             onPointerDown={setActiveItem}
+           >
+             {title.slice(0, 40)}...
+           </li>
+         </Link>
+         <li className="products__item-description">
+           Redesigned from scratch and completely revised.
+         </li>
+       </ul>
+       <div className="products__buttons">
+         <WishlistButton
+           setWishlistItems={setWishlistItems}
+           id={id}
+           isInWishlist={isInWishlist}
+           displayed={displayed}
+         />
+         <button className="products__add-to-cart-button">
+           ADD TO CART
+         </button>
+       </div>
+     </div>
+   );
+ }
   
 
-export default ProductCard
+
+
+
+export default ProductCard;

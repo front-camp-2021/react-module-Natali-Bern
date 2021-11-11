@@ -1,77 +1,47 @@
-import './FiltersContainer.css';
-import Chevrons from './chevrons-right.svg';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
-import { getAllBrandFilters, getAllCategoryFilters } from '../../actions/filtersActions';
-import Filter from './Filter';
-
-
-
+import Filters from "./Filters/Filters/Filters";
+import ResetButton from "./ResetButton/ResetButton";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getBrandsData } from "../../redux/brandsDataSlice";
+import { getCategoriesData } from "../../redux/categoriesDataSlice";
+import MultiRangeSlider from "./Filters/FiltersPrice/FiltersPrice";
 
 function FiltersContainer() {
   const dispatch = useDispatch();
-  const categoryFilters = useSelector(state => state.categoryFilters);
-  const brandFilters = useSelector(state => state.brandFilters);
-
+  const categoriesData = useSelector((state) => state.categoriesData);
+  const brandsData = useSelector((state) => state.brandsData);
 
   useEffect(() => {
-    dispatch(getAllCategoryFilters());
-    dispatch(getAllBrandFilters());
-  }, [])
+    dispatch(getCategoriesData());
+    dispatch(getBrandsData());
+  }, [dispatch]);
 
-
-
-
-
-    return (
-        <>
-        <div class="filters__container">
-          <div className="filters__container-header">
-            <h3 className="filters__container-title">Filters</h3>
-            <button className="btn-white toggle__filters">
-              <img src={Chevrons} />
-            </button>
-          </div>
-
-
-          <div className="form__group">
-            <h3 className="form__group-title">Category</h3>
-
-            {/* {
-            categoryFilters.map ((item, index) => {
-              <Filter
-                filtersListItem={item}
-                type={'category'}
-                key={index}
-              />
-            }
-            )
-          } */}
-          </div>  
-          
-        
-        <br />
-
-        <div className="form__group">
-          <h3 className="form__group-title">Brand</h3>
-          {/* {
-          brandFilters.map((item, index) =>
-            <Filter
-              filtersListItem={item}
-              type={'brand'}
-              key={index}
+  return (
+    <div className="filters">
+      <div className="filters__main">
+        {categoriesData[categoriesData.length - 1] &&
+        brandsData[brandsData.length - 1] ? (
+          <>
+            <MultiRangeSlider />
+            <Filters
+              title="Categories"
+              categoriesData={categoriesData[categoriesData.length - 1]}
+              hasLine={true}
             />
-          )
-        } */}
-        </div>
-
+            <Filters
+              title="Brands"
+              categoriesData={brandsData[brandsData.length - 1]}
+              hasLine={false}
+            />
+          </>
+        ) : (
+          ""
+        )}
       </div>
-
-      <button className="btn-primary clear__filters"
-                    type="button">CLEAR ALL FILTERS</button>
-                  
-      </>
-    )
+      <ResetButton />
+    </div>
+  );
 }
+
 
 export default FiltersContainer;

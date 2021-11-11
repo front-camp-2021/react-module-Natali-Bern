@@ -1,41 +1,52 @@
-import './ProductList.css';
-import ProductCard from "./../ProductCard";
-import { getProducts } from '../../actions/actions';
-import { useDispatch } from 'react-redux';
-import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import Search from "../Search/Search";
+import ProductCard from "../ProductCard/ProductCard";
+import React from "react";
+import { useSelector } from "react-redux";
 
-function ProductList (props) {
-    //  const {prodlist} = props;
-    const dispatch = useDispatch();
-    const prodlist = useSelector((state) => state.prodlist.productitem);
+function ProductList ({cardsData, isFiltered}) {
+  const elementsIndexes = useSelector((state) => state.paginationElements)[
+    useSelector((state) => state.paginationElements).length - 1
+  ];
+  const searchStatus = useSelector((state) => state.searchStatus);
+  const isSearched = searchStatus[searchStatus.length - 1];
 
+  let dataForRender = [];
 
-    
+  if (isFiltered) {
+    dataForRender = cardsData;
+  } else if (isSearched) {
+    dataForRender = cardsData;
+  } else if (isFiltered && isSearched) {
+    dataForRender = cardsData;
+  } else {
+    dataForRender = cardsData;
+  }
 
-
-    
-
-    useEffect(() => {
-        dispatch(getProducts());
-        
-    }, [])
-
-    return (
-        <>
-        <h1>Product</h1>
-        <div className="product-list">
-            {
-                prodlist.map(productitem => {
-                    return (
-                    <ProductCard item={productitem} />
-                    )
-                })
-            }
-            
-        </div>
-        </>
-    )
+  return (
+    <div className="productlist">
+      <Search />
+      <div className="products">
+        {dataForRender.length > 0 ? (
+          dataForRender
+            .slice(elementsIndexes[0], elementsIndexes[1])
+            .map((filteredData) => (
+              <ProductCard
+                key={filteredData.id}
+                id={filteredData.id}
+                img={filteredData.images[0]}
+                rating={filteredData.rating}
+                price={filteredData.price}
+                title={filteredData.title}
+              />
+            ))
+        ) : (
+          <div className="products__filters-error-message">
+            Nothing was found. Please, reset your filters or check your input
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default ProductList;

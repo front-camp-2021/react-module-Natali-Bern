@@ -1,28 +1,43 @@
-import './Search.css';
+import { useDispatch } from "react-redux";
+import { isSearchedStatus } from "../../redux/isSearchedSlice";
+import { setElements } from "../../redux/paginationSlice";
+import { setUserInput } from "../../redux/searchInputSlice";
 
-function Search () {
-    return (
-        <>
-        <div className="product__search">
-        <h3 className="products__search-title">7,618 results found</h3>
+function Search() {
+  const dispatch = useDispatch();
 
-        <button className="products__search-btn">
-            <i class="bi bi-heart wish-icon"></i>
-        </button>
-    </div>
-    <form>
-        <div className="form__search-input use-icon">
-          <input className="search-input" id="search-input"
-                 type="text"
-                 placeholder="Search" />
-          <label className="bi bi-search input-icon"
-                 for="search-input"></label>
-        </div>
-      </form>
-      </>
+  function handleSearchInput(event) {
+    dispatch(
+      isSearchedStatus({
+        isSearchedStatus: true
+      })
     );
+    dispatch(
+      setUserInput({
+        userInput: event.target.value
+      })
+    )
+    dispatch(
+      setElements({
+        indexesAndActivePage: [0, 9, 1]
+      })
+    );
+
+  }
+
+  return (
+    <div className="search">
+      <input
+        className="search__input"
+        placeholder="Search"
+        onChange={handleSearchInput}
+      ></input>
+    </div>
+  );
 }
 
 
 
-export default Search
+
+
+export default Search;
